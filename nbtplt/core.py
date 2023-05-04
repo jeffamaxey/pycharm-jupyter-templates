@@ -45,7 +45,7 @@ class NbTpltSrc:
             return None
         pattern = r'nbtplt\s(.+?)$'
         m = re.search(pattern, pycharm_name)
-        return m.group(1) if m else None
+        return m[1] if m else None
 
     @classmethod
     def _split_tplt_label(cls, label):
@@ -87,12 +87,11 @@ class NbTpltSrc:
         assert len(self.nbtplts) == len(self.nb.cells)
 
     def _get_raw_map(self):
-        _raw_mapping = {}
-        for cid, cdata in zip(self.nbtplts, self.nb.cells):
-            if cid is None:
-                continue
-            _raw_mapping[cid] = cdata
-        return _raw_mapping
+        return {
+            cid: cdata
+            for cid, cdata in zip(self.nbtplts, self.nb.cells)
+            if cid is not None
+        }
 
 
 class NbTpltGen(NbTpltSrc):
